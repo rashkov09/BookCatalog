@@ -50,4 +50,9 @@ public class AuthorServiceImpl implements AuthorService {
                 .map(author -> String.format("%s %s %d",author.getFirstName(),author.getLastName(),author.getBooks().size()))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Author> getAuthorNamesEndingWithCriteria(String criteria) {
+        return authorRepository.findAuthorsByFirstNameEndingWith(criteria);
+    }
 }

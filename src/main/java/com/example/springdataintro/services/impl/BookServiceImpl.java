@@ -47,25 +47,30 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> findAllBooksAfterYear(int year) {
-        return bookRepository
-                .findAllByReleaseDateAfter(LocalDate.of(year,12,31));
+    public List<Book> findBooksByAgeRestriction(AgeRestriction ageRestriction) {
+       return bookRepository.findBookByAgeRestrictionIs(ageRestriction);
     }
 
     @Override
-    public List<String> findAllBooksBeforeYear(int year) {
-        return bookRepository.findAllByReleaseDateBefore(LocalDate.of(year,1,1))
-                .stream().map(book -> String.format("%s %s",book.getAuthor().getFirstName(),book.getAuthor().getLastName()))
-                .distinct()
-                .collect(Collectors.toList());
+    public List<Book> findBooksWithGoldEditionTypeAndNumberOfCopies(EditionType gold, int copies) {
+
+        return bookRepository.findBooksByEditionTypeAndCopiesLessThan(gold,copies);
     }
 
     @Override
-    public List<String> findAllBooksByAuthorFirstAndLastNameOrderByReleaseDate(String firstName,String lastName) {
-        return bookRepository.findAllByAuthor_FirstNameAndAuthor_LastNameOrderByReleaseDateDescTitle(firstName,lastName)
-                .stream()
-                .map(book -> String.format("%s %s %d",book.getTitle(),book.getReleaseDate(),book.getCopies()))
-                .collect(Collectors.toList());
+    public List<Book> findBookByPrice(BigDecimal lower, BigDecimal upper) {
+        return bookRepository.findBookByPriceLessThanOrPriceGreaterThan(lower,upper);
+    }
+
+    @Override
+    public List<Book> findBooksNotReleasedInYear(LocalDate startOfYear, LocalDate endOfYear) {
+        return bookRepository.findBooksByReleaseDateBeforeOrReleaseDateAfter(startOfYear,endOfYear);
+    }
+
+    @Override
+    public List<Book> findBooksReleasedBeforeDate(LocalDate localDate) {
+        return bookRepository.findBookByReleaseDateBefore(localDate);
+
     }
 
 
