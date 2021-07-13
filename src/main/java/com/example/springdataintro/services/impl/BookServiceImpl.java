@@ -73,6 +73,21 @@ public class BookServiceImpl implements BookService {
 
     }
 
+    @Override
+    public List<Book> getBookTitlesWhichContainCriteria(String criteria) {
+        return bookRepository.findBooksByTitleContains(criteria);
+    }
+
+    @Override
+    public List<Book> findBooksByAuthorLastNameStartsWithCriteria(String criteria) {
+        return bookRepository.findBooksByAuthorLastNameContains(criteria);
+    }
+
+    @Override
+    public Integer findBooksWithTitleLengthGreaterThan(int length) {
+        return  bookRepository.findBooksByTitleGreaterThan(length).size();
+    }
+
 
     private Book createBookFromData(String[] data) {
         EditionType editionType = EditionType.values()[Integer.parseInt(data[0])];

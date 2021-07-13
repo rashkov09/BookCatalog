@@ -48,13 +48,43 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
                 case 5 -> exFive();
                 case 6 -> exSix();
                 case 7 -> exSeven();
+                case 8 -> exEight();
+                case 9 -> exNine();
+                case 10 -> exTen();
                 default -> System.out.println("Wrong exercise number. Please try again.");
             }
         }
 
     }
 
-    private void exSeven() {
+    private void exTen() {
+
+    }
+
+    private void exNine() throws IOException {
+        System.out.print("Enter book title name length: ");
+        int length = Integer.parseInt(reader.readLine());
+        System.out.printf("There are %d books with longer title than %d symbols\n",
+                bookService.findBooksWithTitleLengthGreaterThan(length),length);
+
+    }
+
+    private void exEight() throws IOException {
+        System.out.print("Enter author last name search criteria: ");
+        String criteria = reader.readLine();
+        bookService.findBooksByAuthorLastNameStartsWithCriteria(criteria)
+        .stream()
+        .map(book -> String.format("%s (%s %s)",book.getTitle(),book.getAuthor().getFirstName(),book.getAuthor().getLastName()))
+        .forEach(System.out::println);
+    }
+
+    private void exSeven() throws IOException {
+        System.out.print("Enter book search criteria: ");
+        String criteria = reader.readLine();
+        bookService.getBookTitlesWhichContainCriteria(criteria)
+        .stream()
+        .map(book -> String.format("%s",book.getTitle()))
+        .forEach(System.out::println);
     }
 
     private void exSix() throws IOException {

@@ -23,4 +23,10 @@ public interface BookService {
     List<Book> findBooksNotReleasedInYear(LocalDate startOfYear, LocalDate endOfYear);
 
     List<Book> findBooksReleasedBeforeDate(LocalDate localDate);
+
+    List<Book> getBookTitlesWhichContainCriteria(String criteria);
+
+    List<Book> findBooksByAuthorLastNameStartsWithCriteria(String criteria);
+
+    Integer findBooksWithTitleLengthGreaterThan(int length);
 }
