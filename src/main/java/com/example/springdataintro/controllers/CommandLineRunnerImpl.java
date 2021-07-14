@@ -42,29 +42,48 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
     public void run(String... args) throws Exception {
         seedData();
 
-        while(true){
-            System.out.println();
-            System.out.println("Enter exercise number or 0 to EXIT: ");
-            int exNumber = Integer.parseInt(reader.readLine());
-            if (exNumber == 0){
-                break;
-            }
-            switch (exNumber){
-                case 1 -> exOne();
-                case 2 -> exTwo();
-                case 3 -> exThree();
-                case 4-> exFour();
-                case 5 -> exFive();
-                case 6 -> exSix();
-                case 7 -> exSeven();
-                case 8 -> exEight();
-                case 9 -> exNine();
-                case 10 -> exTen();
-                case 11-> exEleven();
-                case 12 -> exTwelve();
-                case 13 -> exThirteen();
-                case 14 -> exFourteen();
-                default -> System.out.println("Wrong exercise number. Please try again.");
+        while (true) {
+            try {
+                System.out.println();
+                System.out.print("1. Books Titles by Age Restriction\n" +
+                        "2. Golden Books\n" +
+                        "3. Books by Price\n" +
+                        "4. Not Released Books\n" +
+                        "5. Books Released Before Date\n" +
+                        "6. Authors Search\n" +
+                        "7. Books Search\n" +
+                        "8. Book Titles Search\n" +
+                        "9. Count Books\n" +
+                        "10. Total Book Copies\n" +
+                        "11. Reduced Book\n" +
+                        "12. Increase Book Copies\n" +
+                        "13. Remove Books\n" +
+                        "14. Stored Procedure\n");
+                System.out.println("Enter exercise number or 0 to EXIT: ");
+                int exNumber = Integer.parseInt(reader.readLine());
+                if (exNumber == 0) {
+                    break;
+                }
+
+                switch (exNumber) {
+                    case 1 -> exOne();
+                    case 2 -> exTwo();
+                    case 3 -> exThree();
+                    case 4 -> exFour();
+                    case 5 -> exFive();
+                    case 6 -> exSix();
+                    case 7 -> exSeven();
+                    case 8 -> exEight();
+                    case 9 -> exNine();
+                    case 10 -> exTen();
+                    case 11 -> exEleven();
+                    case 12 -> exTwelve();
+                    case 13 -> exThirteen();
+                    case 14 -> exFourteen();
+                    default -> System.out.println("Wrong exercise number. Please try again.");
+                }
+            } catch (Exception e) {
+                System.out.println("Something went wrong, please try again!");
             }
         }
 
@@ -87,7 +106,7 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
         String firstName = reader.readLine();
         System.out.print("Enter author last name: ");
         String lastName = reader.readLine();
-        System.out.printf("%s %s has written %d books",firstName,lastName,bookService.getCountOfBooksByAuthor(firstName,lastName));
+        System.out.printf("%s %s has written %d books", firstName, lastName, bookService.getCountOfBooksByAuthor(firstName, lastName));
     }
 
     private void exThirteen() throws IOException {
@@ -100,10 +119,10 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
         System.out.print("Enter date in format (dd MMM yyyy): ");
         Locale.setDefault(Locale.US);
         String date = reader.readLine();
-        LocalDate localDate = LocalDate.parse(date , DateTimeFormatter.ofPattern("dd MMM yyyy"));
+        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd MMM yyyy"));
         System.out.print("Enter number of copies to add: ");
         Integer bookCopiesIncrease = Integer.parseInt(reader.readLine());
-        System.out.println(bookService.increaseBookCopiesForBooksAfterYearAndGetTotal(localDate,bookCopiesIncrease));
+        System.out.println(bookService.increaseBookCopiesForBooksAfterYearAndGetTotal(localDate, bookCopiesIncrease));
 
 
     }
@@ -118,7 +137,7 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
         authorService.getTotalBookCopiesByAuthor()
                 .stream()
                 .sorted(Comparator.reverseOrder())
-                .map(author -> String.format("%s %s - %d",author.getFirstName(),author.getLastName(),
+                .map(author -> String.format("%s %s - %d", author.getFirstName(), author.getLastName(),
                         author.getBooks().stream().map(Book::getCopies).mapToInt(Integer::new).sum())).forEach(System.out::println);
     }
 
@@ -126,7 +145,7 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
         System.out.print("Enter book title name length: ");
         int length = Integer.parseInt(reader.readLine());
         System.out.printf("There are %d books with longer title than %d symbols\n",
-                bookService.findBooksWithTitleLengthGreaterThan(length),length);
+                bookService.findBooksWithTitleLengthGreaterThan(length), length);
 
     }
 
@@ -134,60 +153,60 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
         System.out.print("Enter author last name search criteria: ");
         String criteria = reader.readLine();
         bookService.findBooksByAuthorLastNameStartsWithCriteria(criteria)
-        .stream()
-        .map(book -> String.format("%s (%s %s)",book.getTitle(),book.getAuthor().getFirstName(),book.getAuthor().getLastName()))
-        .forEach(System.out::println);
+                .stream()
+                .map(book -> String.format("%s (%s %s)", book.getTitle(), book.getAuthor().getFirstName(), book.getAuthor().getLastName()))
+                .forEach(System.out::println);
     }
 
     private void exSeven() throws IOException {
         System.out.print("Enter book search criteria: ");
         String criteria = reader.readLine();
         bookService.getBookTitlesWhichContainCriteria(criteria)
-        .stream()
-        .map(book -> String.format("%s",book.getTitle()))
-        .forEach(System.out::println);
+                .stream()
+                .map(book -> String.format("%s", book.getTitle()))
+                .forEach(System.out::println);
     }
 
     private void exSix() throws IOException {
         System.out.print("Enter author name search criteria: ");
         String criteria = reader.readLine();
         authorService.getAuthorNamesEndingWithCriteria(criteria)
-        .stream()
-        .map(author -> String.format("%s %s",author.getFirstName(),author.getLastName()))
-        .forEach(System.out::println);
+                .stream()
+                .map(author -> String.format("%s %s", author.getFirstName(), author.getLastName()))
+                .forEach(System.out::println);
     }
 
     private void exFive() throws IOException {
         System.out.print("Enter date: ");
         int[] dateData = Arrays.stream(reader.readLine().split("-")).mapToInt(Integer::parseInt).toArray();
-        LocalDate localDate = LocalDate.of(dateData[2],dateData[1],dateData[0]);
+        LocalDate localDate = LocalDate.of(dateData[2], dateData[1], dateData[0]);
         bookService.findBooksReleasedBeforeDate(localDate)
                 .stream()
-                .map(book -> String.format("%s %s %.2f",book.getTitle(),book.getEditionType(),book.getPrice()))
+                .map(book -> String.format("%s %s %.2f", book.getTitle(), book.getEditionType(), book.getPrice()))
                 .forEach(System.out::println);
     }
 
     private void exFour() throws IOException {
         System.out.print("Enter release year: ");
         int year = Integer.parseInt(reader.readLine());
-        bookService.findBooksNotReleasedInYear(LocalDate.of(year,1,1),LocalDate.of(year,12,31))
+        bookService.findBooksNotReleasedInYear(LocalDate.of(year, 1, 1), LocalDate.of(year, 12, 31))
                 .stream()
-                .map(book -> String.format("%s",book.getTitle()))
+                .map(book -> String.format("%s", book.getTitle()))
                 .forEach(System.out::println);
     }
 
     private void exThree() {
-        bookService.findBookByPrice(BigDecimal.valueOf(5),BigDecimal.valueOf(40))
-        .stream()
-        .map(book -> String.format("%s - $%.2f",book.getTitle(),book.getPrice()))
-        .forEach(System.out::println);
+        bookService.findBookByPrice(BigDecimal.valueOf(5), BigDecimal.valueOf(40))
+                .stream()
+                .map(book -> String.format("%s - $%.2f", book.getTitle(), book.getPrice()))
+                .forEach(System.out::println);
     }
 
     private void exTwo() {
-        bookService.findBooksWithGoldEditionTypeAndNumberOfCopies(EditionType.valueOf("GOLD"),5000)
-        .stream()
-        .map(book -> String.format("%s",book.getTitle()))
-        .forEach(System.out::println);
+        bookService.findBooksWithGoldEditionTypeAndNumberOfCopies(EditionType.valueOf("GOLD"), 5000)
+                .stream()
+                .map(book -> String.format("%s", book.getTitle()))
+                .forEach(System.out::println);
     }
 
     private void exOne() throws IOException {
@@ -196,8 +215,8 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
         String ageRestriction = reader.readLine().toUpperCase();
         bookService.findBooksByAgeRestriction(AgeRestriction.valueOf(ageRestriction))
                 .stream()
-                .map(book -> String.format("%s",book.getTitle()))
-        .forEach(System.out::println);
+                .map(book -> String.format("%s", book.getTitle()))
+                .forEach(System.out::println);
 
 
     }
