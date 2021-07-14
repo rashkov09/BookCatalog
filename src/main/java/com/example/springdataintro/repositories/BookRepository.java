@@ -5,6 +5,7 @@ import com.example.springdataintro.models.entities.Book;
 import com.example.springdataintro.models.entities.EditionType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -27,5 +28,11 @@ public interface BookRepository extends JpaRepository<Book,Long> {
     @Query("SELECT b FROM Book AS b WHERE length(b.title) > ?1")
     List<Book> findBooksByTitleGreaterThan(Integer length);
 
+    Book findBookByTitle(String title);
 
+    List<Book> findBooksByReleaseDateAfter(LocalDate date);
+    List<Book> findBooksByCopiesLessThan(Integer copies);
+
+    @Query(value = "CALL GET_BOOK_COUNT_BY_AUTHOR(:f_name,:l_name);", nativeQuery = true)
+    Integer getBookByAuthorFirstNameAndAuthorLastName(@Param("f_name") String firstName,@Param("l_name") String lastName);
  }

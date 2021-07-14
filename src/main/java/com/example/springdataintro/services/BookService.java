@@ -29,4 +29,13 @@ public interface BookService {
     List<Book> findBooksByAuthorLastNameStartsWithCriteria(String criteria);
 
     Integer findBooksWithTitleLengthGreaterThan(int length);
+
+
+    String findBookByTitle(String title);
+
+    Integer increaseBookCopiesForBooksAfterYearAndGetTotal(LocalDate localDate, Integer bookCopiesIncrease);
+
+    Integer removeBooksWithCopiesLowerThanInput(int copies);
+
+    Integer getCountOfBooksByAuthor(String firstName, String lastName);
 }

@@ -55,4 +55,9 @@ public class AuthorServiceImpl implements AuthorService {
     public List<Author> getAuthorNamesEndingWithCriteria(String criteria) {
         return authorRepository.findAuthorsByFirstNameEndingWith(criteria);
     }
+
+    @Override
+    public List<Author> getTotalBookCopiesByAuthor() {
+        return authorRepository.findAllByBooksSizeDESC();
+    }
 }

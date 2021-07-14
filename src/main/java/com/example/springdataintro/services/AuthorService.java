@@ -15,4 +15,6 @@ public interface AuthorService {
     List<String> getAllAuthorsOrderByCountOfTheirBooks();
 
     List<Author> getAuthorNamesEndingWithCriteria(String criteria);
+
+    List<Author> getTotalBookCopiesByAuthor();
 }

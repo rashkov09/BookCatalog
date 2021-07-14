@@ -5,7 +5,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "authors")
-public class Author extends BaseEntity{
+public class Author extends BaseEntity implements Comparable<Author>{
     private String firstName;
     private String lastName;
     private Set<Book> books;
@@ -17,6 +17,9 @@ public class Author extends BaseEntity{
         this.firstName = firstName;
         this.lastName = lastName;
     }
+
+
+
 
     @Column(name = "first_name")
 
@@ -46,5 +49,15 @@ public class Author extends BaseEntity{
 
     public void setBooks(Set<Book> books) {
         this.books = books;
+    }
+
+
+
+    @Override
+    public int compareTo(Author o) {
+        Integer bookCount = this.getBooks().stream().map(Book::getCopies).mapToInt(Integer::new).sum();
+        Integer otherCount = o.getBooks().stream().map(Book::getCopies).mapToInt(Integer::new).sum();
+
+        return bookCount.compareTo(otherCount);
     }
 }

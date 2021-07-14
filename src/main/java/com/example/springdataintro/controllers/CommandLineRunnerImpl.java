@@ -9,13 +9,22 @@ import com.example.springdataintro.services.CategoryService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import javax.swing.text.DateFormatter;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Locale;
 
+@SuppressWarnings("ALL")
 @Component
 public class CommandLineRunnerImpl implements CommandLineRunner {
     private final CategoryService categoryService;
@@ -51,14 +60,66 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
                 case 8 -> exEight();
                 case 9 -> exNine();
                 case 10 -> exTen();
+                case 11-> exEleven();
+                case 12 -> exTwelve();
+                case 13 -> exThirteen();
+                case 14 -> exFourteen();
                 default -> System.out.println("Wrong exercise number. Please try again.");
             }
         }
 
     }
 
-    private void exTen() {
+    private void exFourteen() throws IOException {
+        /**
+         * The stored procedure
+         *
+         * BEGIN
+         * SELECT COUNT(b.id)
+         * FROM books AS b
+         * JOIN	authors AS a
+         * ON a.id =b.author_id
+         * WHERE a.first_name = f_name AND a.last_name = l_name;
+         * END
+         */
 
+        System.out.print("Enter author first name: ");
+        String firstName = reader.readLine();
+        System.out.print("Enter author last name: ");
+        String lastName = reader.readLine();
+        System.out.printf("%s %s has written %d books",firstName,lastName,bookService.getCountOfBooksByAuthor(firstName,lastName));
+    }
+
+    private void exThirteen() throws IOException {
+        System.out.print("Enter number of copies: ");
+        int copies = Integer.parseInt(reader.readLine());
+        System.out.println(bookService.removeBooksWithCopiesLowerThanInput(copies));
+    }
+
+    private void exTwelve() throws IOException {
+        System.out.print("Enter date in format (dd MMM yyyy): ");
+        Locale.setDefault(Locale.US);
+        String date = reader.readLine();
+        LocalDate localDate = LocalDate.parse(date , DateTimeFormatter.ofPattern("dd MMM yyyy"));
+        System.out.print("Enter number of copies to add: ");
+        Integer bookCopiesIncrease = Integer.parseInt(reader.readLine());
+        System.out.println(bookService.increaseBookCopiesForBooksAfterYearAndGetTotal(localDate,bookCopiesIncrease));
+
+
+    }
+
+    private void exEleven() throws IOException {
+        System.out.print("Enter book title: ");
+        String title = reader.readLine();
+        System.out.println(bookService.findBookByTitle(title));
+    }
+
+    private void exTen() {
+        authorService.getTotalBookCopiesByAuthor()
+                .stream()
+                .sorted(Comparator.reverseOrder())
+                .map(author -> String.format("%s %s - %d",author.getFirstName(),author.getLastName(),
+                        author.getBooks().stream().map(Book::getCopies).mapToInt(Integer::new).sum())).forEach(System.out::println);
     }
 
     private void exNine() throws IOException {

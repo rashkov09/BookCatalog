@@ -88,6 +88,38 @@ public class BookServiceImpl implements BookService {
         return  bookRepository.findBooksByTitleGreaterThan(length).size();
     }
 
+    @Override
+    public String findBookByTitle(String title) {
+        Book book = bookRepository.findBookByTitle(title);
+        return  String.format("%s %s %s %.2f",
+                        book.getTitle(),
+                        book.getEditionType(),
+                        book.getAgeRestriction(),
+                        book.getPrice());
+    }
+
+    @Override
+    public Integer increaseBookCopiesForBooksAfterYearAndGetTotal(LocalDate localDate, Integer bookCopiesIncrease) {
+        List<Book> books = bookRepository.findBooksByReleaseDateAfter(localDate);
+        books.forEach(book -> {
+            book.setCopies(book.getCopies()+bookCopiesIncrease);
+            bookRepository.save(book);
+        });
+        return books.size()*bookCopiesIncrease;
+    }
+
+    @Override
+    public Integer removeBooksWithCopiesLowerThanInput(int copies) {
+        List<Book> books = bookRepository.findBooksByCopiesLessThan(copies);
+        bookRepository.deleteAll(books);
+        return books.size();
+    }
+
+    @Override
+    public Integer getCountOfBooksByAuthor(String firstName, String lastName) {
+        return bookRepository.getBookByAuthorFirstNameAndAuthorLastName(firstName,lastName);
+    }
+
 
     private Book createBookFromData(String[] data) {
         EditionType editionType = EditionType.values()[Integer.parseInt(data[0])];
